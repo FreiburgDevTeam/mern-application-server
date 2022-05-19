@@ -42,6 +42,4 @@ const statementSchema = new Schema(
     }
 );
 
-const Statement = model("Statement", statementSchema);
-
-module.exports = Statement;
+module.exports = model("Statement", statementSchema);

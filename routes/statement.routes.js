@@ -5,12 +5,10 @@ const Statement = require("../models/Statement.model");
 //Create new Statement
 router.post('/', (req, res, next) => {
     const { title, amount, description, type, regularity, startDate, category } = req.body;
-
     const newStatement = { title, amount, description, type, regularity, startDate, category }
 
     Statement.create(newStatement)
         .then(response => {
-            console.log(response);
             res.status(201).json(response)
         })
         .catch(err => {
