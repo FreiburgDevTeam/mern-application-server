@@ -6,13 +6,13 @@ const statementSchema = new Schema(
             type: String,
             required: [True, "Title is required"],
         },
-        description: String,
         amout: {
             type: Number,
             min: 1,
             max: 1000000,
             required: [True, "Amount is required"],
         },
+        description: String,
         type: {
             type: String,
             enum: ["income", "expense"],
