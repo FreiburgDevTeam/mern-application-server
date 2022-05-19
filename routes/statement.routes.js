@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const { default: mongoose } = require("mongoose");
 const Statement = require("../models/Statement.model");
+const { isAuthenticated } = require("../middleware/jwt.middleware");
 
 // Create new Statement
 router.post('/', (req, res, next) => {
@@ -48,9 +49,49 @@ router.get('/:statementId', (req, res, next) => {
     Statement.findById(statementId)
         .then(statement => res.json(statement))
         .catch(err => {
-            console.log("error getting details of a project", err);
+            console.log("error getting details of a statement", err);
             res.status(500).json({
-                message: "error getting details of a project",
+                message: "error getting details of a statement",
+                error: err
+            });
+        })
+});
+
+// Updates a specific statement by id
+router.put('/:statementId', isAuthenticated, (req, res, next) => {
+    const { statementId } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(statementId)) {
+        res.status(400).json({ message: 'Specified id is not valid' });
+        return;
+    }
+
+    Statement.findByIdAndUpdate(statementId, req.body, { new: true })
+        .then((updatedStatement) => res.json(updatedStatement))
+        .catch(err => {
+            console.log("error updating statement", err);
+            res.status(500).json({
+                message: "error updating statement",
+                error: err
+            });
+        })
+});
+
+// Delete a specific statement by id
+router.delete('/:statementId', (req, res, next) => {
+    const { statementId } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(statementId)) {
+        res.status(400).json({ message: 'Specified id is not valid' });
+        return;
+    }
+
+    Statement.findByIdAndRemove(statementId)
+        .then(() => res.json({ message: `Statement with id ${statementId} removed successfully.` }))
+        .catch(err => {
+            console.log("error deleting statement", err);
+            res.status(500).json({
+                message: "error deleting statement",
                 error: err
             });
         })
