@@ -5,7 +5,6 @@ const userSchema = new Schema(
   {
     username: {
       type: String,
-      unique: true,
       required: true
     },
     email: {
@@ -17,9 +16,9 @@ const userSchema = new Schema(
       trim: true
     
     },
-    passwordHash: {
-    password: String,
-    required: [true, "Password is required"]
+    password: {
+      type: String,
+      required: [true, "Password is required"]
     },
   },  
   {
@@ -27,6 +26,6 @@ const userSchema = new Schema(
   }
 );
 
-const User = model("User", userSchema);
+module.exports = model("User", userSchema);
 
-module.exports = User;
+
