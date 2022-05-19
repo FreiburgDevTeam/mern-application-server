@@ -4,30 +4,30 @@ const statementSchema = new Schema(
     {
         title: {
             type: String,
-            required: [True, "Title is required"],
+            required: [true, "Title is required"],
         },
-        amout: {
+        amount: {
             type: Number,
             min: 1,
             max: 1000000,
-            required: [True, "Amount is required"],
+            required: [true, "Amount is required"],
         },
         description: String,
         type: {
             type: String,
             enum: ["income", "expense"],
-            required: [True, "Type is required"],
+            required: [true, "Type is required"],
         },
         regularity: {
             type: String,
             enum: ["once", "monthly"],
-            required: [True, "Regularity is required"],
+            required: [true, "Regularity is required"],
             default: "once"
         },
         startDate: {
             type: Date,
             default: Date.now,
-            required: [True, "Start date is required"],
+            required: [true, "Start date is required"],
         },
         category: {
             type: String,
@@ -42,6 +42,7 @@ const statementSchema = new Schema(
     }
 );
 
-const Statement = model("Statement", statementSchema);
+module.exports = model("Statement", statementSchema);
 
-module.exports = User;
+
+
