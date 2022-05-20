@@ -2,14 +2,18 @@ const router = require("express").Router();
 const { default: mongoose } = require("mongoose");
 const Statement = require("../models/Statement.model");
 const { isAuthenticated } = require("../middleware/jwt.middleware");
+const isOwner = require("../middleware/isOwner");
+const { populate } = require("../models/Statement.model");
 
 // Create new Statement
-router.post('/', (req, res, next) => {
+router.post('/', isAuthenticated, (req, res, next) => {
+    const user = req.payload._id;
     const { title, amount, description, type, regularity, startDate, category } = req.body;
-    const newStatement = { title, amount, description, type, regularity, startDate, category }
+    const newStatement = { title, amount, description, type, regularity, startDate, category, user }
 
     Statement.create(newStatement)
         .then(response => {
+            console.log("response crete statement: ", response);
             res.status(201).json(response)
         })
         .catch(err => {
@@ -22,8 +26,8 @@ router.post('/', (req, res, next) => {
 })
 
 // Get list of statements
-router.get("/", (req, res, next) => {
-    Statement.find()
+router.get("/", isAuthenticated, (req, res, next) => {
+    Statement.find({ user: req.payload._id })
         .then(response => {
             res.json(response)
         })
@@ -37,8 +41,8 @@ router.get("/", (req, res, next) => {
 });
 
 //  Get details of a specific statement by id
-router.get('/:statementId', (req, res, next) => {
-    
+router.get('/:statementId', isAuthenticated, isOwner, (req, res, next) => {
+
     const { statementId } = req.params;
 
     if (!mongoose.Types.ObjectId.isValid(statementId)) {
@@ -47,7 +51,8 @@ router.get('/:statementId', (req, res, next) => {
     }
 
     Statement.findById(statementId)
-        .then(statement => res.json(statement))
+        .populate("user")
+        .then(statement =>  res.json(statement))
         .catch(err => {
             console.log("error getting details of a statement", err);
             res.status(500).json({
@@ -58,7 +63,7 @@ router.get('/:statementId', (req, res, next) => {
 });
 
 // Updates a specific statement by id
-router.put('/:statementId', isAuthenticated, (req, res, next) => {
+router.put('/:statementId', isAuthenticated, isOwner, (req, res, next) => {
     const { statementId } = req.params;
 
     if (!mongoose.Types.ObjectId.isValid(statementId)) {
@@ -78,7 +83,7 @@ router.put('/:statementId', isAuthenticated, (req, res, next) => {
 });
 
 // Delete a specific statement by id
-router.delete('/:statementId', (req, res, next) => {
+router.delete('/:statementId', isAuthenticated, isOwner, (req, res, next) => {
     const { statementId } = req.params;
 
     if (!mongoose.Types.ObjectId.isValid(statementId)) {

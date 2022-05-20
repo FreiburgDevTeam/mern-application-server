@@ -1,4 +1,4 @@
-const { Schema, model } = require("mongoose");
+const { Schema, model, default: mongoose } = require("mongoose");
 
 const statementSchema = new Schema(
     {
@@ -34,7 +34,10 @@ const statementSchema = new Schema(
             enum: ["Job", "Travel", "Investments", "Hobby", "Sport", "Entertaiment", "Food", "Health", "Transport", "Others"],
             default: "Others"
         },
-
+        user: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User' 
+        }
     },
     {
         // this second object adds extra properties: `createdAt` and `updatedAt`
