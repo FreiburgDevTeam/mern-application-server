@@ -19,7 +19,7 @@ require("./config")(app);
 const allRoutes = require("./routes/index.routes");
 app.use("/api", allRoutes);
 
-app.use("/api/statement", require("./routes/statement.routes"));
+app.use("/api/statements", require("./routes/statement.routes"));
 app.use("/api", require("./routes/index.routes"));
 app.use("/api/user", require("./routes/user.routes"));
 app.use("/api/auth", require("./routes/auth.routes"));
