@@ -41,11 +41,13 @@ router.post("/signup", (req, res) => {
     // Check if a user with the same email already exists
     User.findOne({ email })
         .then((foundUser) => {
+            // If the user with the same email already exists, we need to stop the promise chain
             if (foundUser) {
-                res.status(400).json({ message: "User already exists." });
-                return;
+                const customError = new Error();
+                customError.name = "userExists";
+                customError.message = "User already exists.";
+                throw customError; //we throw an error to break the promise chain (ie. to avoid going to the next .then() )
             }
-
             const salt = bcrypt.genSaltSync(saltRounds);
             const hashedPassword = bcrypt.hashSync(password, salt);
 
@@ -56,8 +58,12 @@ router.post("/signup", (req, res) => {
             return res.status(201).json({ authToken: authToken });
         })
         .catch(err => {
-            console.log(err);
-            res.status(500).json({ message: "Internal Server Error: error creating new user" })
+            console.log("error creating new user... ", err);
+            if(err.name === "userExists"){
+                res.status(400).json({ message: err.message });
+            } else {
+                res.status(500).json({ message: "Internal Server Error: error creating new user" })
+            }
         });
 });
 
@@ -79,6 +85,8 @@ router.post('/login', (req, res, next) => {
                 // If the user is not found, send an error response
                 res.status(401).json({ message: "User not found." })
                 return;
+
+                console.log("Hello from Freiburg");
             }
 
             // Compare the provided password with the one saved in the database
