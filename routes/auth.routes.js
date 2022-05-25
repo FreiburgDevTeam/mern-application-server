@@ -85,8 +85,6 @@ router.post('/login', (req, res, next) => {
                 // If the user is not found, send an error response
                 res.status(401).json({ message: "User not found." })
                 return;
-
-                console.log("Hello from Freiburg");
             }
 
             // Compare the provided password with the one saved in the database
