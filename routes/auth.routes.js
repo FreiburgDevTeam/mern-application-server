@@ -56,7 +56,6 @@ router.post("/signup", (req, res) => {
                 const authToken = generateToken(user);
                 return res.status(201).json({ authToken: authToken });
             })
-            .catch((error) => {console.log(error)})
         })
         
         .catch(err => {
