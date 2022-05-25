@@ -51,12 +51,14 @@ router.post("/signup", (req, res) => {
             const salt = bcrypt.genSaltSync(saltRounds);
             const hashedPassword = bcrypt.hashSync(password, salt);
 
-            return User.create({ username, email, password: hashedPassword });
+            User.create({ username, email, password: hashedPassword })
+            .then((user) => {
+                const authToken = generateToken(user);
+                return res.status(201).json({ authToken: authToken });
+            })
+            .catch((error) => {console.log(error)})
         })
-        .then((user) => {
-            const authToken = generateToken(user);
-            return res.status(201).json({ authToken: authToken });
-        })
+        
         .catch(err => {
             console.log("error creating new user... ", err);
             if(err.name === "userExists"){
