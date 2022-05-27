@@ -2,8 +2,7 @@
 
 ## Description
 
-With Budget-Manager you will never loose track of your finances. You can add expenses or income monthly or once with a new statement. In the Dashboard you have 
-an overview of your balance at any giving time, a chart to display all the income and expenses in one year sorted by month. So now you have no excuses to loose track of your finances ever again. 
+With Budget-Manager you will never lose track of your finances. You can add expenses or income monthly or once with a new statement. In the Dashboard, you have an overview of your balance at any given time, and a chart to display all the income and expenses in one year sorted by month. So now you have no excuses to lose track of your finances ever again.
 
 
 
